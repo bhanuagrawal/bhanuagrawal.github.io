@@ -728,22 +728,24 @@
         if (!res.ok) throw new Error('fetch failed');
         const events = await res.json();
 
-        const TYPES = ['PushEvent', 'CreateEvent', 'ReleaseEvent'];
-        const now   = Date.now();
-        const DAY   = 24 * 60 * 60 * 1000;
+        const TYPES  = ['PushEvent', 'CreateEvent', 'ReleaseEvent'];
+        const now    = Date.now();
+        const DAY    = 24 * 60 * 60 * 1000;
+        const WINDOW = 60 * DAY; // show section only if active within 60 days
 
         const relevant = events
           .filter(e => TYPES.includes(e.type))
           .map(e => ({ ...e, age: now - new Date(e.created_at).getTime() }));
 
-        // No public activity at all → hide the whole section
-        if (relevant.length === 0) {
+        const mostRecent = relevant[0];
+
+        // No public activity within window → hide the whole section
+        if (!mostRecent || mostRecent.age > WINDOW) {
           section.style.display = 'none';
           return;
         }
 
-        const mostRecent = relevant[0];
-        const daysAgo    = Math.floor(mostRecent.age / DAY);
+        const daysAgo = Math.floor(mostRecent.age / DAY);
 
         // ── Reveal chart only when activity data confirms it ──
         graphWrap.style.display = 'block';
@@ -755,7 +757,7 @@
         } else if (daysAgo <= 30) {
           badgeHtml = `<span class="gh-status-badge recent"><span class="gh-status-dot"></span>Active this month</span>`;
         } else {
-          // Activity exists but older than 30 days — show chart, no badge
+          badgeHtml = `<span class="gh-status-badge recent"><span class="gh-status-dot"></span>Active recently</span>`;
         }
         const lastDate = new Date(mostRecent.created_at)
           .toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -764,9 +766,9 @@
           <span class="gh-last-seen">Last push: ${lastDate}</span>
         `;
 
-        // ── Activity feed (up to 4 events, within 90 days) ──
+        // ── Activity feed — within 60 days, up to 4 events ──
         const feed = relevant
-          .filter(e => e.age < 90 * DAY)
+          .filter(e => e.age < WINDOW)
           .slice(0, 4);
 
         if (feed.length === 0) {
