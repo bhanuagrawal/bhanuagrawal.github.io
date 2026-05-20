@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhanu Agrawal — Android Engineer</title>
+  <meta name="description" content="Senior Android Engineer with 9 years building high-traffic mobile products. Kotlin, Jetpack Compose, on-device AI." />
+  <meta property="og:title" content="Bhanu Agrawal — Android Engineer" />
+  <meta property="og:description" content="Senior Android Engineer. Paytm, LeadSquared, Kotlin, Compose, on-device AI." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Tokens ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --teal:       hsl(187, 74%, 32%);
+      --teal-light: hsl(187, 74%, 42%);
+      --teal-bg:    hsl(187, 40%, 10%);
+      --purple:     hsl(270, 70%, 60%);
+      --bg:         #0d0d14;
+      --bg2:        #13131f;
+      --bg3:        #1a1a2e;
+      --border:     rgba(255,255,255,0.07);
+      --text:       #e2e2f0;
+      --muted:      #888899;
+      --heading:    #ffffff;
+      --tag-bg:     rgba(255,255,255,0.05);
+      --tag-border: rgba(255,255,255,0.10);
+      --shadow:     0 4px 24px rgba(0,0,0,0.4);
+    }
+    [data-theme="light"] {
+      --bg:         #f8f8fc;
+      --bg2:        #ffffff;
+      --bg3:        #f0f0f8;
+      --border:     rgba(0,0,0,0.08);
+      --text:       #2f2f3f;
+      --muted:      #666677;
+      --heading:    #1a1a2e;
+      --tag-bg:     hsl(187,40%,95%);
+      --tag-border: hsl(187,40%,85%);
+      --teal-bg:    hsl(187, 40%, 95%);
+      --shadow:     0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,13,20,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    [data-theme="light"] nav { background: rgba(248,248,252,0.88); }
+    .nav-inner {
+      max-width: 760px; margin: 0 auto; padding: 0 24px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 16px;
+      color: var(--heading);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--teal-light); }
+    .theme-toggle {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 18px;
+      padding: 4px; border-radius: 6px;
+      transition: color 0.2s;
+    }
+    .theme-toggle:hover { color: var(--teal-light); }
+
+    /* ── Sections ── */
+    section { padding: 80px 0; }
+    section:first-of-type { padding-top: 120px; }
+
+    .section-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--teal-light);
+      margin-bottom: 32px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Hero ── */
+    #hero { padding-top: 140px; padding-bottom: 80px; }
+    .hero-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 22px; color: #fff;
+      margin-bottom: 24px;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+    }
+    .hero-eyebrow {
+      font-size: 13px; font-weight: 500;
+      color: var(--teal-light); margin-bottom: 10px;
+      letter-spacing: 0.02em;
+    }
+    .hero-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(36px, 6vw, 52px);
+      font-weight: 700; color: var(--heading);
+      letter-spacing: -0.03em; line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .hero-name span {
+      background: linear-gradient(to right, var(--teal-light), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline {
+      font-size: 17px; color: var(--muted);
+      max-width: 520px; margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--teal); color: #fff;
+      border: 1px solid transparent;
+    }
+    .btn-primary:hover { background: var(--teal-light); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal-light); }
+
+    /* ── About ── */
+    .about-text {
+      font-size: 16px; color: var(--text); line-height: 1.8;
+    }
+    .about-text p + p { margin-top: 16px; }
+    .about-text strong { color: var(--heading); font-weight: 600; }
+
+    /* ── Experience ── */
+    .job { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
+    .job:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .job-meta {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 12px; margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .job-company {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 17px; font-weight: 700;
+      color: var(--purple);
+    }
+    .job-period {
+      font-size: 12px; color: var(--muted);
+      background: var(--tag-bg); border: 1px solid var(--tag-border);
+      padding: 3px 10px; border-radius: 20px;
+      white-space: nowrap;
+    }
+    .job-role {
+      font-size: 14px; font-weight: 600; color: var(--heading);
+      margin-bottom: 12px;
+    }
+    .job ul { padding-left: 18px; }
+    .job li {
+      font-size: 14px; line-height: 1.7;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .job li::marker { color: var(--teal); }
+
+    /* ── Projects ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .project-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      display: block;
+    }
+    .project-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .project-card-top {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 10px;
+    }
+    .project-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 700; color: var(--heading);
+    }
+    .project-badge {
+      font-size: 10px; font-weight: 600;
+      color: var(--teal-light);
+      background: var(--teal-bg);
+      padding: 2px 8px; border-radius: 4px;
+      border: 1px solid var(--teal);
+    }
+    .project-tech {
+      font-size: 11px; color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .project-desc {
+      font-size: 13.5px; color: var(--text); line-height: 1.65;
+    }
+
+    /* ── Skills ── */
+    .skills-group { margin-bottom: 24px; }
+    .skills-group-label {
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      font-size: 12.5px; font-weight: 500;
+      color: var(--text);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      padding: 5px 12px; border-radius: 6px;
+    }
+
+    /* ── Contact ── */
+    .contact-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 40px;
+      text-align: center;
+    }
+    .contact-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px; font-weight: 700;
+      color: var(--heading); margin-bottom: 12px;
+    }
+    .contact-box p {
+      color: var(--muted); font-size: 15px; margin-bottom: 28px;
+    }
+    .contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0; text-align: center;
+      font-size: 12px; color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .nav-links a:not(:last-child) { display: none; }
+      section { padding: 60px 0; }
+      #hero { padding-top: 100px; }
+      .contact-box { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#hero">BA</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">☀</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-avatar">BA</div>
+      <p class="hero-eyebrow">Senior Android Engineer · Noida, India</p>
+      <h1 class="hero-name">Bhanu <span>Agrawal</span></h1>
+      <p class="hero-tagline">
+        9 years building Android apps at scale — Paytm (300M+ users) and LeadSquared.
+        Kotlin, Jetpack Compose, on-device AI. Two apps live on the Play Store.
+      </p>
+      <div class="hero-links">
+        <a class="btn btn-primary" href="mailto:bhanuagrawal001@gmail.com">
+          ✉ Get in touch
+        </a>
+        <a class="btn btn-outline" href="https://www.linkedin.com/in/bhanu-agrawal-39b655b6/" target="_blank" rel="noopener">
+          LinkedIn
+        </a>
+        <a class="btn btn-outline" href="https://github.com/bhanuagrawal" target="_blank" rel="noopener">
+          GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <p class="section-label">About</p>
+      <div class="about-text">
+        <p>
+          Android engineer with 9 years of experience building high-traffic mobile products.
+          I've worked at scale — at <strong>Paytm</strong> (300M+ users, ~99.9% crash-free) and
+          <strong>LeadSquared</strong> — taking features from architecture decisions through
+          app store delivery.
+        </p>
+        <p>
+          At LeadSquared I redesigned the Lead Detail screen into a
+          <strong>pluggable Compose widget architecture</strong>: 15+ independently owned widgets,
+          each with its own immutable state and MVI reducer, routed through a widget runtime
+          so teams ship new sections without touching central infrastructure.
+        </p>
+        <p>
+          I've shipped a <strong>function-calling LLM chatbot</strong> in a production CRM app
+          and built <strong>Gemini Nano agent loops</strong> using Android 16's App Functions API —
+          including in my own Play Store apps, developed with AI coding tools.
+          Strong in Kotlin, Jetpack Compose, KMP, and offline-first architecture.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <div class="container">
+      <p class="section-label">Experience</p>
+
+      <div class="job">
+        <div class="job-meta">
+          <span class="job-company">LeadSquared</span>
+          <span class="job-period">Aug 2024 – Present</span>
+        </div>
+        <div class="job-role">Senior Software Engineer (Android) · Noida, India</div>
+        <ul>
+          <li>Designed a pluggable Compose widget platform for the Lead Detail screen (highest-traffic CRM surface): 15+ independently owned widgets, each with its own renderer, immutable state, and MVI reducer. A widget runtime routes typed actions via <code>widgetId → widget type → definition</code> — teams ship new sections by registering a widget, with zero changes to central infrastructure.</li>
+          <li>Owned Service Cloud Android client end-to-end — offline-first MVI architecture, proactive pre-fetch sync for low-latency ticket access, ~70% unit test coverage, crash/ANR guards, and structured observability.</li>
+          <li>Shipped an on-device LLM chatbot for Service Cloud: model invokes app-exposed methods to answer conversational CRM queries — function-calling pattern, all inference local, zero cloud dependency.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-meta">
+          <span class="job-company">Paytm</span>
+          <span class="job-period">Dec 2019 – Jul 2024</span>
+        </div>
+        <div class="job-role">Software Engineer → Senior → Tech Lead · Noida, India</div>
+        <ul>
+          <li>Maintained ~99.9% crash-free rate across a 300M+ user fintech app via Firebase crash/perf monitoring, staged rollouts, and systematic ANR/performance tuning.</li>
+          <li>Cut APK size by 4 MB and improved cold-start time through modularization and dead-code elimination.</li>
+          <li>Mentored 6+ engineers; established coding standards, review practices, and crash/ANR triage protocols across squads.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-meta">
+          <span class="job-company">MetaDesign Solutions</span>
+          <span class="job-period">Jul 2019 – Dec 2019</span>
+        </div>
+        <div class="job-role">Software Engineer · Gurgaon, India</div>
+        <ul>
+          <li>Built real-time chat with live location tracking (Kotlin, RxJava, Firestore, Maps SDK, OpenTok); engineered low-latency geospatial updates and stabilized video calling under poor network conditions.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-meta">
+          <span class="job-company">Tata Consultancy Services</span>
+          <span class="job-period">Nov 2016 – Jun 2019</span>
+        </div>
+        <div class="job-role">System Engineer · Nagpur, India</div>
+        <ul>
+          <li>Developed enterprise mobile apps (MVVM, Dagger2, Room DB, RxJava); built reusable UI components and CI/CD pipelines to reduce release cycle time.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container">
+      <p class="section-label">Projects</p>
+      <div class="projects-grid">
+
+        <a class="project-card" href="https://play.google.com/store/apps/details?id=agrawal.bhanu.zenlist" target="_blank" rel="noopener">
+          <div class="project-card-top">
+            <span class="project-title">ZenList</span>
+            <span class="project-badge">Play Store ↗</span>
+          </div>
+          <p class="project-tech">Kotlin · Compose · KMP · Gemini Nano · App Functions API · Hilt</p>
+          <p class="project-desc">Cross-platform habit tracker with an on-device Gemini Nano agent loop — model interprets intent and invokes typed app functions (log habit, check streak, set goal) locally. Zero cloud calls. Built and shipped solo.</p>
+        </a>
+
+        <a class="project-card" href="https://play.google.com/store/apps/details?id=agrawal.bhanu.mindfullauncher" target="_blank" rel="noopener">
+          <div class="project-card-top">
+            <span class="project-title">MindfulLauncher</span>
+            <span class="project-badge">Play Store ↗</span>
+          </div>
+          <p class="project-tech">Kotlin · Compose · Hilt · Firebase</p>
+          <p class="project-desc">System launcher with event-driven architecture, injectable per-event handlers, and a screen-time dashboard. Built spec-to-Play Store solo using AI coding tools.</p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <p class="section-label">Skills</p>
+
+      <div class="skills-group">
+        <p class="skills-group-label">Android</p>
+        <div class="tags">
+          <span class="tag">Kotlin</span>
+          <span class="tag">Jetpack Compose</span>
+          <span class="tag">Android SDK</span>
+          <span class="tag">KMP</span>
+          <span class="tag">Hilt / Dagger2</span>
+          <span class="tag">Room DB</span>
+          <span class="tag">WorkManager</span>
+          <span class="tag">Retrofit / Ktor</span>
+          <span class="tag">Coroutines / Flow</span>
+          <span class="tag">RxJava</span>
+          <span class="tag">JUnit / Mockito / Espresso</span>
+        </div>
+      </div>
+
+      <div class="skills-group">
+        <p class="skills-group-label">Architecture</p>
+        <div class="tags">
+          <span class="tag">MVI / MVVM</span>
+          <span class="tag">Clean Architecture</span>
+          <span class="tag">Offline-First</span>
+          <span class="tag">Modularization</span>
+          <span class="tag">Server-Driven UI</span>
+          <span class="tag">Pluggable Component Design</span>
+        </div>
+      </div>
+
+      <div class="skills-group">
+        <p class="skills-group-label">AI / On-Device</p>
+        <div class="tags">
+          <span class="tag">Gemini Nano (AICore)</span>
+          <span class="tag">App Functions API</span>
+          <span class="tag">On-device Agent Loops</span>
+          <span class="tag">Function-Calling Patterns</span>
+          <span class="tag">AI Coding Tools</span>
+        </div>
+      </div>
+
+      <div class="skills-group">
+        <p class="skills-group-label">Practices</p>
+        <div class="tags">
+          <span class="tag">CI/CD</span>
+          <span class="tag">Firebase Observability</span>
+          <span class="tag">Staged Rollouts</span>
+          <span class="tag">App Store Deployment</span>
+          <span class="tag">Engineering Mentorship</span>
+          <span class="tag">Code Review</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <p class="section-label">Contact</p>
+      <div class="contact-box">
+        <h3>Let's talk</h3>
+        <p>Open to senior / staff Android roles, remote or NCR-hybrid.<br>India only.</p>
+        <div class="contact-links">
+          <a class="btn btn-primary" href="mailto:bhanuagrawal001@gmail.com">bhanuagrawal001@gmail.com</a>
+          <a class="btn btn-outline" href="https://www.linkedin.com/in/bhanu-agrawal-39b655b6/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn btn-outline" href="https://github.com/bhanuagrawal" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Bhanu Agrawal · Noida, India · bhanuagrawal001@gmail.com</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.querySelector('.theme-toggle').textContent = isDark ? '☾' : '☀';
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+    // Restore saved theme
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      document.documentElement.setAttribute('data-theme', saved);
+      document.querySelector('.theme-toggle').textContent = saved === 'dark' ? '☀' : '☾';
+    }
+  </script>
+
+</body>
+</html>
