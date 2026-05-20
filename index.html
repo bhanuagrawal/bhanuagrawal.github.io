@@ -171,18 +171,8 @@
       background: linear-gradient(135deg, rgba(0,180,168,.1) 0%, rgba(130,80,220,.1) 100%);
     }
     .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .hero-stats {
-      display: flex; gap: 32px; margin-top: 48px;
-      padding-top: 32px; border-top: 1px solid var(--border);
-    }
-    .stat-num {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px; font-weight: 700; color: var(--heading);
-      letter-spacing: -.02em; line-height: 1;
-    }
-    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-    /* ── Section heading ── */
+/* ── Section heading ── */
     .sec-heading {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 11px; font-weight: 700;
@@ -298,6 +288,45 @@
       padding: 4px 11px; border-radius: 6px;
     }
 
+    /* ── GitHub Activity ── */
+    .gh-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .gh-graph-wrap {
+      padding: 28px 28px 20px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .gh-graph {
+      width: 100%; max-width: 800px;
+      height: auto; display: block;
+      opacity: .85;
+      filter: saturate(1.2);
+    }
+    [data-theme="light"] .gh-graph { opacity: 1; }
+    .gh-recent {
+      padding: 20px 28px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .gh-event {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 13px;
+    }
+    .gh-event-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--teal); margin-top: 5px; flex-shrink: 0;
+    }
+    .gh-event-repo {
+      font-weight: 600; color: var(--teal);
+      text-decoration: none; font-size: 13px;
+    }
+    .gh-event-repo:hover { text-decoration: underline; }
+    .gh-event-desc { color: var(--muted); font-size: 12px; margin-top: 1px; }
+    .gh-empty { color: var(--muted); font-size: 13px; padding: 4px 0; }
+
     /* ── Contact ── */
     .contact-wrap {
       background: var(--bg2); border: 1px solid var(--border);
@@ -380,24 +409,6 @@
           <a class="btn btn-teal" href="#contact">Get in touch</a>
           <a class="btn btn-ghost" href="#work">See my work</a>
           <a class="btn btn-ghost" href="https://github.com/bhanuagrawal" target="_blank" rel="noopener">GitHub ↗</a>
-        </div>
-        <div class="hero-stats">
-          <div>
-            <div class="stat-num">9</div>
-            <div class="stat-label">Years Android</div>
-          </div>
-          <div>
-            <div class="stat-num">300M+</div>
-            <div class="stat-label">Users at Paytm</div>
-          </div>
-          <div>
-            <div class="stat-num">15+</div>
-            <div class="stat-label">Compose Widgets Shipped</div>
-          </div>
-          <div>
-            <div class="stat-num">2</div>
-            <div class="stat-label">Play Store Apps</div>
-          </div>
         </div>
       </div>
       <div class="hero-photo">
@@ -578,6 +589,26 @@
     </div>
   </div>
 
+  <!-- GitHub Activity -->
+  <div class="section" id="github">
+    <p class="sec-heading fade-up">GitHub</p>
+    <h2 class="sec-title fade-up">Contribution activity</h2>
+
+    <div class="gh-card fade-up">
+      <div class="gh-graph-wrap">
+        <img
+          src="https://ghchart.rshah.org/1a9090/bhanuagrawal"
+          alt="GitHub contribution graph for bhanuagrawal"
+          class="gh-graph"
+          loading="lazy"
+        />
+      </div>
+      <div class="gh-recent" id="gh-recent">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- Contact -->
   <div class="section" id="contact">
     <div class="contact-wrap fade-up">
@@ -613,6 +644,56 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // GitHub recent activity
+    (async () => {
+      const container = document.getElementById('gh-recent');
+      if (!container) return;
+      try {
+        const res = await fetch('https://api.github.com/users/bhanuagrawal/events/public');
+        if (!res.ok) throw new Error();
+        const events = await res.json();
+
+        // Filter to pushes and releases within last 90 days
+        const cutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
+        const relevant = events.filter(e =>
+          ['PushEvent', 'CreateEvent', 'ReleaseEvent', 'WatchEvent'].includes(e.type) &&
+          new Date(e.created_at).getTime() > cutoff
+        ).slice(0, 4);
+
+        if (relevant.length === 0) {
+          // No recent public activity — hide entire section
+          document.getElementById('github').style.display = 'none';
+          return;
+        }
+
+        container.innerHTML = relevant.map(e => {
+          const repo = e.repo.name.replace('bhanuagrawal/', '');
+          const repoUrl = `https://github.com/${e.repo.name}`;
+          const date = new Date(e.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short' });
+          let desc = '';
+          if (e.type === 'PushEvent') {
+            const msg = e.payload?.commits?.[0]?.message?.split('\n')[0] || 'pushed code';
+            desc = `${date} · ${msg.length > 60 ? msg.slice(0, 60) + '…' : msg}`;
+          } else if (e.type === 'CreateEvent') {
+            desc = `${date} · created ${e.payload?.ref_type || 'repo'}`;
+          } else if (e.type === 'ReleaseEvent') {
+            desc = `${date} · released ${e.payload?.release?.tag_name || ''}`;
+          } else {
+            desc = date;
+          }
+          return `<div class="gh-event">
+            <div class="gh-event-dot"></div>
+            <div>
+              <a class="gh-event-repo" href="${repoUrl}" target="_blank" rel="noopener">${repo}</a>
+              <div class="gh-event-desc">${desc}</div>
+            </div>
+          </div>`;
+        }).join('');
+      } catch {
+        container.innerHTML = '<p class="gh-empty">Could not load recent activity.</p>';
+      }
+    })();
 
     // Active nav on scroll
     const sections = document.querySelectorAll('[id]');
