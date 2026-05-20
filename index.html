@@ -171,6 +171,56 @@
     .p-tags { display:flex; flex-wrap:wrap; gap:5px; margin-top:auto; }
     .p-tag { font-size:10.5px; color:var(--muted); background:rgba(255,255,255,.04); border:1px solid var(--border); padding:2px 8px; border-radius:4px; }
 
+    /* JOURNEY / TIMELINE */
+    .timeline { position:relative; padding-left:44px; }
+    .timeline::before {
+      content:''; position:absolute; left:7px; top:10px; bottom:10px; width:2px;
+      background:linear-gradient(to bottom, var(--teal), var(--purple));
+      border-radius:2px;
+    }
+    .tl-item { position:relative; margin-bottom:20px; }
+    .tl-item:last-child { margin-bottom:0; }
+    .tl-node {
+      position:absolute; left:-40px; top:20px;
+      width:16px; height:16px; border-radius:50%;
+      border:2px solid var(--teal-dim); background:var(--bg);
+    }
+    .tl-node.now {
+      border-color:var(--teal); background:var(--teal);
+      box-shadow:0 0 0 5px rgba(0,180,168,.15);
+      animation:pulse 2s infinite;
+    }
+    .tl-card {
+      background:var(--bg2); border:1px solid var(--border); border-radius:16px;
+      padding:22px 26px; transition:border-color .2s, transform .2s;
+    }
+    .tl-card:hover { border-color:var(--border-h); transform:translateX(3px); }
+    .tl-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .tl-company { font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:700; color:var(--heading); }
+    .tl-period { font-size:11.5px; color:var(--muted); white-space:nowrap; padding-top:4px; }
+    .tl-role-badge {
+      display:inline-block; font-size:10.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase;
+      color:var(--teal); background:rgba(0,180,168,.07); border:1px solid rgba(0,180,168,.15);
+      padding:2px 9px; border-radius:4px; margin-bottom:12px;
+    }
+    .tl-desc { font-size:13.5px; color:var(--text); line-height:1.75; }
+
+    /* EDUCATION */
+    .edu-card {
+      margin-top:20px;
+      background:var(--bg2); border:1px solid var(--border); border-radius:14px;
+      padding:20px 26px; display:flex; align-items:center; gap:20px;
+    }
+    .edu-accent {
+      width:42px; height:42px; border-radius:10px; flex-shrink:0;
+      background:linear-gradient(135deg, var(--teal-dim), var(--purple));
+      display:flex; align-items:center; justify-content:center;
+      font-size:18px;
+    }
+    .edu-degree { font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; color:var(--heading); margin-bottom:3px; }
+    .edu-uni { font-size:13px; color:var(--muted); }
+    .edu-year { font-size:11.5px; color:var(--muted); margin-left:auto; white-space:nowrap; align-self:center; background:var(--bg3); border:1px solid var(--border); padding:3px 10px; border-radius:6px; }
+
     /* SKILLS */
     .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; }
     .sg { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; }
@@ -237,8 +287,13 @@
       #hero, .wrap { padding-left:20px; padding-right:20px; }
       .hero-inner { grid-template-columns:1fr; }
       .hero-img { width:100%; height:220px; }
-      .work-card { grid-template-columns:1fr; }
+      .work-list { grid-template-columns:1fr; }
       .work-visual { min-height:160px; }
+      .timeline { padding-left:32px; }
+      .tl-node { left:-28px; }
+      .tl-period { display:none; }
+      .edu-card { flex-wrap:wrap; }
+      .edu-year { margin-left:0; }
       .project-grid { grid-template-columns:1fr; }
       .contact-box { padding:40px 24px; }
     }
@@ -253,6 +308,7 @@
   </a>
   <div class="nav-r">
     <a href="#work">Work</a>
+    <a href="#journey">Journey</a>
     <a href="#projects">Projects</a>
     <a href="#contact">Contact</a>
     <button class="tbtn" onclick="toggleTheme()">☀</button>
@@ -362,6 +418,77 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section class="section" id="journey">
+  <div class="wrap">
+    <p class="sec-label fade">Career</p>
+    <h2 class="sec-title fade">The story so far</h2>
+
+    <div class="timeline">
+
+      <div class="tl-item fade">
+        <div class="tl-node now"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <div class="tl-company">LeadSquared</div>
+            <span class="tl-period">Aug 2024 – Present</span>
+          </div>
+          <div class="tl-role-badge">Senior Software Engineer · Android</div>
+          <p class="tl-desc">Took ownership of the highest-traffic screen in the CRM and redesigned it into a pluggable Compose widget platform — 15+ widgets, each with its own renderer, state, and MVI reducer. Also proposed and shipped an on-device LLM chatbot that answers CRM queries locally via function-calling, with zero cloud dependency.</p>
+        </div>
+      </div>
+
+      <div class="tl-item fade">
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <div class="tl-company">Paytm</div>
+            <span class="tl-period">Dec 2019 – Jul 2024</span>
+          </div>
+          <div class="tl-role-badge">Engineer → Senior → Tech Lead</div>
+          <p class="tl-desc">Grew from IC to Tech Lead over 4.5 years at India's largest fintech app — 300M+ users. Maintained ~99.9% crash-free stability, owned UPI onboarding and delivery module migrations end-to-end, cut APK size by 4 MB, and mentored a squad of 6+ engineers.</p>
+        </div>
+      </div>
+
+      <div class="tl-item fade">
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <div class="tl-company">MetaDesign Solutions</div>
+            <span class="tl-period">Jul 2019 – Dec 2019</span>
+          </div>
+          <div class="tl-role-badge">Software Engineer · Android</div>
+          <p class="tl-desc">Built real-time chat with live location tracking — Kotlin, RxJava, Firestore, Maps SDK, and OpenTok. Focused on low-latency geospatial updates and keeping video calls stable on weak networks.</p>
+        </div>
+      </div>
+
+      <div class="tl-item fade">
+        <div class="tl-node"></div>
+        <div class="tl-card">
+          <div class="tl-head">
+            <div class="tl-company">Tata Consultancy Services</div>
+            <span class="tl-period">Nov 2016 – Jun 2019</span>
+          </div>
+          <div class="tl-role-badge">System Engineer · Mobile</div>
+          <p class="tl-desc">Where it all started — enterprise Android with MVVM, Dagger2, Room DB, and RxJava. Built reusable UI components and CI/CD pipelines that became the baseline for the team's release process.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Education -->
+    <div class="edu-card fade">
+      <div class="edu-accent">🎓</div>
+      <div>
+        <div class="edu-degree">B.Tech · Computer Science</div>
+        <div class="edu-uni">Aligarh Muslim University &nbsp;·&nbsp; CGPA 8.0 / 10</div>
+      </div>
+      <div class="edu-year">2012 – 2016</div>
+    </div>
+
   </div>
 </section>
 
