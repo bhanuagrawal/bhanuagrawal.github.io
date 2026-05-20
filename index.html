@@ -326,6 +326,31 @@
     .gh-event-repo:hover { text-decoration: underline; }
     .gh-event-desc { color: var(--muted); font-size: 12px; margin-top: 1px; }
     .gh-empty { color: var(--muted); font-size: 13px; padding: 4px 0; }
+    .gh-graph-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .gh-status-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    .gh-status-badge.active {
+      color: hsl(142,60%,45%);
+      background: rgba(34,197,94,.08);
+      border: 1px solid rgba(34,197,94,.2);
+    }
+    .gh-status-badge.recent {
+      color: var(--teal);
+      background: rgba(0,180,168,.08);
+      border: 1px solid rgba(0,180,168,.2);
+    }
+    .gh-status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+    .gh-status-badge.active .gh-status-dot { background: hsl(142,60%,45%); animation: pulse 2s infinite; }
+    .gh-status-badge.recent .gh-status-dot { background: var(--teal); }
+    .gh-last-seen { font-size: 12px; color: var(--muted); }
 
     /* ── Contact ── */
     .contact-wrap {
@@ -595,16 +620,16 @@
     <h2 class="sec-title fade-up">Contribution activity</h2>
 
     <div class="gh-card fade-up">
-      <div class="gh-graph-wrap">
+      <div class="gh-graph-wrap" id="gh-graph-wrap" style="display:none">
+        <div class="gh-graph-header" id="gh-status"></div>
         <img
           src="https://ghchart.rshah.org/1a9090/bhanuagrawal"
           alt="GitHub contribution graph for bhanuagrawal"
           class="gh-graph"
-          loading="lazy"
         />
       </div>
       <div class="gh-recent" id="gh-recent">
-        <!-- populated by JS -->
+        <p class="gh-empty">Loading activity…</p>
       </div>
     </div>
   </div>
@@ -645,33 +670,70 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // GitHub recent activity
+    // GitHub activity — gates chart visibility
     (async () => {
-      const container = document.getElementById('gh-recent');
-      if (!container) return;
+      const section   = document.getElementById('github');
+      const graphWrap = document.getElementById('gh-graph-wrap');
+      const statusEl  = document.getElementById('gh-status');
+      const feedEl    = document.getElementById('gh-recent');
+
       try {
         const res = await fetch('https://api.github.com/users/bhanuagrawal/events/public');
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error('fetch failed');
         const events = await res.json();
 
-        // Filter to pushes and releases within last 90 days
-        const cutoff = Date.now() - 90 * 24 * 60 * 60 * 1000;
-        const relevant = events.filter(e =>
-          ['PushEvent', 'CreateEvent', 'ReleaseEvent', 'WatchEvent'].includes(e.type) &&
-          new Date(e.created_at).getTime() > cutoff
-        ).slice(0, 4);
+        const TYPES = ['PushEvent', 'CreateEvent', 'ReleaseEvent'];
+        const now   = Date.now();
+        const DAY   = 24 * 60 * 60 * 1000;
 
+        const relevant = events
+          .filter(e => TYPES.includes(e.type))
+          .map(e => ({ ...e, age: now - new Date(e.created_at).getTime() }));
+
+        // No public activity at all → hide the whole section
         if (relevant.length === 0) {
-          // No recent public activity — hide entire section
-          document.getElementById('github').style.display = 'none';
+          section.style.display = 'none';
           return;
         }
 
-        container.innerHTML = relevant.map(e => {
-          const repo = e.repo.name.replace('bhanuagrawal/', '');
+        const mostRecent = relevant[0];
+        const daysAgo    = Math.floor(mostRecent.age / DAY);
+
+        // ── Reveal chart only when activity data confirms it ──
+        graphWrap.style.display = 'block';
+
+        // Status badge based on recency
+        let badgeHtml = '';
+        if (daysAgo <= 7) {
+          badgeHtml = `<span class="gh-status-badge active"><span class="gh-status-dot"></span>Active this week</span>`;
+        } else if (daysAgo <= 30) {
+          badgeHtml = `<span class="gh-status-badge recent"><span class="gh-status-dot"></span>Active this month</span>`;
+        } else {
+          // Activity exists but older than 30 days — show chart, no badge
+        }
+        const lastDate = new Date(mostRecent.created_at)
+          .toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        statusEl.innerHTML = `
+          ${badgeHtml}
+          <span class="gh-last-seen">Last push: ${lastDate}</span>
+        `;
+
+        // ── Activity feed (up to 4 events, within 90 days) ──
+        const feed = relevant
+          .filter(e => e.age < 90 * DAY)
+          .slice(0, 4);
+
+        if (feed.length === 0) {
+          feedEl.innerHTML = '';
+          return;
+        }
+
+        feedEl.innerHTML = feed.map(e => {
+          const repo    = e.repo.name.replace('bhanuagrawal/', '');
           const repoUrl = `https://github.com/${e.repo.name}`;
-          const date = new Date(e.created_at).toLocaleDateString('en-IN', { day:'numeric', month:'short' });
-          let desc = '';
+          const date    = new Date(e.created_at)
+            .toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+          let desc = date;
           if (e.type === 'PushEvent') {
             const msg = e.payload?.commits?.[0]?.message?.split('\n')[0] || 'pushed code';
             desc = `${date} · ${msg.length > 60 ? msg.slice(0, 60) + '…' : msg}`;
@@ -679,8 +741,6 @@
             desc = `${date} · created ${e.payload?.ref_type || 'repo'}`;
           } else if (e.type === 'ReleaseEvent') {
             desc = `${date} · released ${e.payload?.release?.tag_name || ''}`;
-          } else {
-            desc = date;
           }
           return `<div class="gh-event">
             <div class="gh-event-dot"></div>
@@ -690,8 +750,10 @@
             </div>
           </div>`;
         }).join('');
+
       } catch {
-        container.innerHTML = '<p class="gh-empty">Could not load recent activity.</p>';
+        // API failed — hide the section silently rather than show broken UI
+        section.style.display = 'none';
       }
     })();
 
