@@ -204,34 +204,54 @@
       background: linear-gradient(to right, var(--teal), var(--purple));
     }
     .featured-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
-    .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .project-card {
       background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px;
-      text-decoration: none; display: block;
-      transition: border-color .2s, transform .2s;
+      border-radius: 16px; overflow: hidden;
+      text-decoration: none; display: flex; flex-direction: column;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
     }
-    .project-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
-    .project-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-    .p-icon { font-size: 28px; line-height: 1; }
-    .p-link {
-      font-size: 11px; color: var(--teal); font-weight: 600;
-      background: rgba(0,180,168,.08); border: 1px solid rgba(0,180,168,.2);
-      padding: 3px 10px; border-radius: 20px; text-decoration: none;
+    .project-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.3);
+    }
+    .p-screenshot {
+      width: 100%; aspect-ratio: 16/9;
+      object-fit: cover; object-position: top;
+      display: block;
+      border-bottom: 1px solid var(--border);
+    }
+    .p-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+    .p-top {
+      display: flex; align-items: center;
+      gap: 10px; margin-bottom: 10px;
+    }
+    .p-icon-img {
+      width: 36px; height: 36px; border-radius: 9px;
+      object-fit: cover; flex-shrink: 0;
+      border: 1px solid var(--border);
     }
     .p-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 17px; font-weight: 700;
-      color: var(--heading); margin-bottom: 8px;
+      font-size: 15px; font-weight: 700;
+      color: var(--heading); flex: 1;
     }
-    .p-desc { font-size: 13.5px; color: var(--text); line-height: 1.65; margin-bottom: 14px; }
-    .p-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .p-link {
+      font-size: 10px; color: var(--teal); font-weight: 600;
+      background: rgba(0,180,168,.08); border: 1px solid rgba(0,180,168,.2);
+      padding: 2px 8px; border-radius: 20px; white-space: nowrap;
+      text-decoration: none;
+    }
+    .p-desc { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 14px; flex: 1; }
+    .p-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: auto; }
     .p-tag {
-      font-size: 11px; color: var(--muted);
+      font-size: 10.5px; color: var(--muted);
       background: rgba(255,255,255,.04);
       border: 1px solid var(--border);
-      padding: 2px 9px; border-radius: 4px;
+      padding: 2px 8px; border-radius: 4px;
     }
+    @media (max-width: 800px) { .project-grid { grid-template-columns: 1fr; } }
 
     /* ── Experience timeline ── */
     .timeline { position: relative; padding-left: 28px; }
@@ -448,36 +468,62 @@
     <h2 class="sec-title fade-up">Things I've built</h2>
 
     <div class="project-grid">
+
       <a class="project-card fade-up" href="https://play.google.com/store/apps/details?id=agrawal.bhanu.zenlist" target="_blank" rel="noopener">
-        <div class="project-top">
-          <div class="p-icon">✅</div>
-          <span class="p-link">Play Store ↗</span>
-        </div>
-        <div class="p-title">ZenList</div>
-        <p class="p-desc">Habit tracker with a Gemini Nano on-device agent loop — model invokes typed app functions locally. Zero cloud calls. Built and shipped solo using Android 16's App Functions API.</p>
-        <div class="p-tags">
-          <span class="p-tag">Kotlin</span>
-          <span class="p-tag">Compose</span>
-          <span class="p-tag">KMP</span>
-          <span class="p-tag">Gemini Nano</span>
-          <span class="p-tag">App Functions API</span>
+        <img class="p-screenshot" src="https://play-lh.googleusercontent.com/IPEQFsJRJHZEqsyStL5iZTmpqbP1WjD_Mq5iIPRy2OREF0GA7PxXsUkh9z9HwJlonTqurAhXRTUurg07iR1nyL8=w526-h296-rw" alt="ZenList screenshot" loading="lazy" />
+        <div class="p-body">
+          <div class="p-top">
+            <img class="p-icon-img" src="https://play-lh.googleusercontent.com/Qhhs-YwoourJ0BDp_bMg68zxG72vSapTOK1DGgUoPnlldzKcuJb35NkPDRY73yMAu-SQ2OY-59tSap8r9ZDg=w240-h480-rw" alt="ZenList icon" />
+            <span class="p-title">ZenList</span>
+            <span class="p-link">Play Store ↗</span>
+          </div>
+          <p class="p-desc">Habit tracker with a Gemini Nano on-device agent loop — model invokes typed app functions locally. Zero cloud calls. Built solo using Android 16's App Functions API.</p>
+          <div class="p-tags">
+            <span class="p-tag">Kotlin</span>
+            <span class="p-tag">Compose</span>
+            <span class="p-tag">KMP</span>
+            <span class="p-tag">Gemini Nano</span>
+            <span class="p-tag">App Functions API</span>
+          </div>
         </div>
       </a>
 
       <a class="project-card fade-up" href="https://play.google.com/store/apps/details?id=agrawal.bhanu.mindfullauncher" target="_blank" rel="noopener">
-        <div class="project-top">
-          <div class="p-icon">🧘</div>
-          <span class="p-link">Play Store ↗</span>
-        </div>
-        <div class="p-title">MindfulLauncher</div>
-        <p class="p-desc">System launcher with event-driven architecture, injectable per-event handlers, and a screen-time dashboard. Spec to Play Store solo — built with AI coding tools.</p>
-        <div class="p-tags">
-          <span class="p-tag">Kotlin</span>
-          <span class="p-tag">Compose</span>
-          <span class="p-tag">Hilt</span>
-          <span class="p-tag">Firebase</span>
+        <img class="p-screenshot" src="https://play-lh.googleusercontent.com/Sq-adVfmAZgOVO4Ra0XFqnXPw47VWfYB8RhqEWiDHf5ViCqwtZMR-jbiOiKV3u2VPYjfIaAohpx5juiXmCGL=w526-h296-rw" alt="MindfulLauncher screenshot" loading="lazy" />
+        <div class="p-body">
+          <div class="p-top">
+            <img class="p-icon-img" src="https://play-lh.googleusercontent.com/dCv_WntCrEomaZ2H84_lgTJDyHqgyV-mhgyQvnmLKprqLr8iG0XJKobs5wmWl5HskzuhA4V88iNqvHUcoZYw3g=w240-h480-rw" alt="MindfulLauncher icon" />
+            <span class="p-title">MindfulLauncher</span>
+            <span class="p-link">Play Store ↗</span>
+          </div>
+          <p class="p-desc">System launcher with event-driven architecture, injectable per-event handlers, and a screen-time dashboard. Spec to Play Store solo — built with AI coding tools.</p>
+          <div class="p-tags">
+            <span class="p-tag">Kotlin</span>
+            <span class="p-tag">Compose</span>
+            <span class="p-tag">Hilt</span>
+            <span class="p-tag">Firebase</span>
+          </div>
         </div>
       </a>
+
+      <a class="project-card fade-up" href="https://play.google.com/store/apps/details?id=agrawal.bhanu.pdfkit" target="_blank" rel="noopener">
+        <img class="p-screenshot" src="https://play-lh.googleusercontent.com/90MDortR1REVJLgRv6iIGqKeAGP7jOmqQp2MYsX1ekvHDwzljq6fagj4J-JDN4zpThJ4h9OJMSeulC7lHk3JPRo=w526-h296-rw" alt="PDF Splitter screenshot" loading="lazy" />
+        <div class="p-body">
+          <div class="p-top">
+            <img class="p-icon-img" src="https://play-lh.googleusercontent.com/2zTIM68Vipv4mPOTeqZdyYpqYgU50GLZZc0VFqXIiL3Nm03NuRZRnqqe2bgUCkRG96PfxkKfqgOEaEiXeJ40Cg=w240-h480-rw" alt="PDF Splitter icon" />
+            <span class="p-title">PDF Splitter</span>
+            <span class="p-link">Play Store ↗</span>
+          </div>
+          <p class="p-desc">Split, merge, and manage PDF files entirely on-device — no internet required. Offline-first by design, built and shipped solo.</p>
+          <div class="p-tags">
+            <span class="p-tag">Kotlin</span>
+            <span class="p-tag">Compose</span>
+            <span class="p-tag">Offline-First</span>
+            <span class="p-tag">PDF Processing</span>
+          </div>
+        </div>
+      </a>
+
     </div>
   </div>
 
